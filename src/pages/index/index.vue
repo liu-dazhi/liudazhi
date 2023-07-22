@@ -12,7 +12,7 @@
     :class="{ active: currentTab === '首页' }"
     @click="currentTab = '首页'"
   >
-    <uni-icons type="home" size="30" color="currentColor"></uni-icons>
+    <box-icon color="currentColor" name='home-heart'></box-icon>
     <text class="tab-text">首页</text>
   </view>
   <view
@@ -20,7 +20,7 @@
     :class="{ active: currentTab === '待定' }"
     @click="currentTab = '待定'"
   >
-    <uni-icons type="folder-add" size="30" color="currentColor"></uni-icons>
+    <box-icon name='add-to-queue' color="currentColor"></box-icon>
     <text class="tab-text">选项</text>
   </view>
   <view
@@ -28,7 +28,7 @@
     :class="{ active: currentTab === '我的' }"
     @click="currentTab = '我的'"
   >
-    <uni-icons type="person" size="30" color="currentColor"></uni-icons>
+    <box-icon name='user' color="currentColor"></box-icon>
     <text class="tab-text">我的</text>
   </view>
 </view>
@@ -48,6 +48,7 @@ export default {
   data() {
     return {
       currentTab: '首页',
+     
     };
   },
   computed: {

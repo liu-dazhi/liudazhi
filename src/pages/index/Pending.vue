@@ -5,9 +5,13 @@
       {{ item.name }}
       <view v-if="item.showOptions" class="options">
 
-        <span @click.stop="deleteItem(item)"><uni-icons type="trash" color="red" size="20"></uni-icons></span>
+        <span @click.stop="deleteItem(item)">
+          <box-icon name='message-square-x' color="red" size="20"></box-icon>
+        </span>
 
-        <span @click.stop="editItem(item)"><uni-icons type="compose" color="blue" size="20"></uni-icons></span>
+        <span @click.stop="editItem(item)">
+          <box-icon name='edit-alt' color="blue" size="20"></box-icon>
+        </span>
 
       </view>
     </view>
@@ -20,7 +24,10 @@
     <div v-if="showModal" class="modal">
 
       <div class="modal-content">
-          <uni-easyinput type="text" v-model="newItem" placeholder="输入待插入的内容" />
+        <FormLayout layout="vertical">
+        
+      </FormLayout>
+          <input type="text" v-model="newItem" placeholder="输入待插入的内容" />
         <div class="modal-buttons" style="margin-top: 5px;">
           <button class="cancel-btn" @click="cancelInsert">取消</button>
           <button class="confirm-btn" @click="insertItem">确认</button>
@@ -30,7 +37,7 @@
 
     <div v-if="showUpdateModal" class="modal">
       <div class="modal-content">
-        <uni-easyinput type="text" v-model="updateItem" placeholder="输入修改后的内容" />
+        <input type="text" v-model="updateItem" placeholder="输入修改后的内容" />
         <div class="modal-buttons"  style="margin-top: 5px;">
           <button class="cancel-btn" @click="cancelUpdate">取消</button>
           <button class="confirm-btn" @click="updateItemApply">确认</button>

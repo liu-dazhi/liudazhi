@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import App from './App'
+import 'boxicons'
 import './uni.promisify.adaptor'
+
 
 Vue.config.productionTip = false
 
