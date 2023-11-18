@@ -1,5 +1,8 @@
-<template>
+<template >
   <view>
+    <template v-if="modal">
+    <span v-if="rouletteItems.length === 0 && modal"> 该分组没有数据，快点添加吧~ </span>
+
     <view v-for="item in rouletteItems" :key="item.id" :style="{ backgroundColor: item.color }" class="item"
       @click="showOptions(item)">
       {{ item.name }}
@@ -15,6 +18,7 @@
 
       </view>
     </view>
+    
     <view @click="showInsertModal">
       <button class="insert-btn">+</button>
     </view>
@@ -44,6 +48,7 @@
         </div>
       </div>
     </div>
+  </template>
   </view>
 </template>
 <script>
@@ -56,16 +61,22 @@ export default {
       newItem: '',
       updateItem: '',
       itmeId: '',
+      groupId: '',
       showModal: false,
       showUpdateModal: false,
+      modal: false
     };
   },
   created() {
-    this.fetchRouletteItems();
+   
   },
   methods: {
-    fetchRouletteItems() {
-      axios.get('/api/getData')
+    fetchRouletteItems(itemId) {
+      axios.get('/api/getData',{
+        params:{
+          groupId:itemId
+        }
+      })
         .then(response => {
           this.rouletteItems = response.data.data.map(item => ({
             id: item.id,
@@ -77,6 +88,14 @@ export default {
         .catch(error => {
           console.error('Error fetching data:', error);
         });
+    },
+    show(id){
+      this.fetchRouletteItems(id);
+      this.groupId = id;
+      this.modal = true;
+    },
+    close(){
+      this.modal = false;
     },
     showOptions(item) {
       this.rouletteItems.forEach(i => {
@@ -93,7 +112,7 @@ export default {
           .post('/api/deleteData', { id: item.id })
           .then(response => {
             console.log('Item deleted:', response.data);
-            this.fetchRouletteItems();
+            this.fetchRouletteItems(this.groupId);
           })
           .catch(error => {
             console.error('Error deleting item:', error);
@@ -124,7 +143,7 @@ export default {
       axios.post('/api/updateData', { name: this.updateItem, id: this.itmeId })
         .then(response => {
           console.log('Item updateData:', response.data);
-          this.fetchRouletteItems();
+          this.fetchRouletteItems(this.groupId);
           this.updateItem = '';
           this.showUpdateModal = false;
         })
@@ -138,10 +157,10 @@ export default {
         alert('请输入待插入的内容');
         return;
       }
-      axios.post('/api/insertData', { name: this.newItem })
+      axios.post('/api/insertData', { name: this.newItem,groupId:this.groupId })
         .then(response => {
           console.log('Item inserted:', response.data);
-          this.fetchRouletteItems();
+          this.fetchRouletteItems(this.groupId);
           this.newItem = '';
           this.showModal = false;
         })
@@ -205,6 +224,24 @@ function getRandomColor() {
   position: fixed;
   bottom: 80px;
   right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+
+.back-btn {
+  position: fixed;
+  bottom: 80px;
+  right: 370px;
   width: 50px;
   height: 50px;
   border-radius: 50%;

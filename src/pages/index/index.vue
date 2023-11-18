@@ -35,9 +35,9 @@
 </view>
 </template>
 <script>
-import Home from './Home.vue';
-import Pending from './Pending.vue';
-import Profile from './Profile.vue';
+import Home from '../home/Home.vue';
+import Pending from '../padding/Pending.vue';
+import Profile from '../my/Profile.vue';
 
 export default {
   components: {
