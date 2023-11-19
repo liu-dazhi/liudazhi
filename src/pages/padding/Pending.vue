@@ -6,12 +6,16 @@
         :key="item.id"
         :style="{ backgroundColor: item.color }"
         class="item"
-        @click="showNowModel(item)"
       >
-        <span>
-          {{ item.name }}
-        </span>
-      </view>
+        <view  @click="showNowModel(item)">
+          <span >
+            {{ item.name }}
+          </span>
+        </view>
+        <view  @click="checkoutGroup(item)">
+          <button class="checout-btn">选择</button>
+          </view>
+        </view>
       <view @click="showInsertModal">
         <button class="insert-btn">+</button>
       </view>
@@ -64,6 +68,23 @@ export default {
     this.fetchRouletteItems();
   },
   methods: {
+    checkoutGroup(item){
+      console.log(item.id)
+      axios
+        .post(`/api/group/checkGroup?groupId=${item.id}`)
+        .then((res) => {
+          if(res.data.code===200){
+            alert("操作成功")
+          }else{
+            var char = '操作失败：' + res.data.message
+            alert(char)
+          }
+        })
+        .catch((error) => {
+          var char = '操作失败：' + error.response.data.message
+          alert(char)
+        });
+    },
     fetchRouletteItems() {
       axios
         .get("/api/group/getGroupData")
@@ -87,8 +108,6 @@ export default {
           i.showOptions = true;
         }
       });
-
-     
       if (this.nowModel) {
         this.$refs.pendingGroup.show(item.id);
       }else{
@@ -191,7 +210,7 @@ function getRandomColor() {
   text-align: center;
   position: relative;
   cursor: pointer;
-  width: 90%;
+  width: 70%;
 }
 
 .options {
@@ -226,6 +245,20 @@ function getRandomColor() {
   display: flex;
   align-items: center;
   justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+.checout-btn {
+  position: absolute;
+  bottom: 0px;
+  right: -68px;
+ 
+  height: 36px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 15px;
+  align-items: center;
   border: none;
   cursor: pointer;
 }
