@@ -13,8 +13,8 @@
           </span>
         </view>
         <view  @click="checkoutGroup(item)">
-          <button class="checout-btn">选择</button>
-          </view>
+          <button class="checout-btn">{{ item.id !== groupId ? '选择' : '已选' }}</button>
+        </view>
         </view>
       <view @click="showInsertModal">
         <button class="insert-btn">+</button>
@@ -58,22 +58,33 @@ export default {
       newItem: "",
       updateItem: "",
       itmeId: "",
+      groupId: "",
       showModal: false,
       showUpdateModal: false,
       nowModel: true,
-      
     };
   },
   created() {
     this.fetchRouletteItems();
+    this.checkoutLogin();
   },
   methods: {
+    checkoutLogin() {
+      axios.get("/api/account/checkLogin").then(res => {
+          if(res.data.data === null){
+            this.groupId = '2f2509a6861811ee81ee0242ac120002'
+          }else{
+            this.groupId = res.data.data.groupId
+          }
+      })
+    },
     checkoutGroup(item){
       console.log(item.id)
       axios
         .post(`/api/group/checkGroup?groupId=${item.id}`)
         .then((res) => {
           if(res.data.code===200){
+            this.checkoutLogin()
             alert("操作成功")
           }else{
             var char = '操作失败：' + res.data.message
@@ -168,7 +179,7 @@ export default {
         return;
       }
       axios
-        .post("/api/insertData", { name: this.newItem })
+        .post("/api/insertGroupData", { name: this.newItem })
         .then((response) => {
           console.log("Item inserted:", response.data);
           this.fetchRouletteItems();
@@ -176,7 +187,8 @@ export default {
           this.showModal = false;
         })
         .catch((error) => {
-          console.error("Error inserting item:", error);
+          var char = '操作失败：' + error.response.data.message
+          alert(char)
         });
     },
     startLongPress(item) {

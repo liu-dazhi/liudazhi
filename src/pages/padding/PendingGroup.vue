@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     fetchRouletteItems(itemId) {
-      axios.get('/api/getData',{
+      axios.get('/api/getDataByGroupId',{
         params:{
           groupId:itemId
         }
